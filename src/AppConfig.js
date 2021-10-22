@@ -35,16 +35,6 @@ const schedulerConfig = {
             editor: false
         }
     ],
-
-    eventRenderer({ eventRecord: task, renderData }) {
-        if (task.showInTimeline) {
-            renderData.eventColor = 'green';
-        } else {
-            renderData.eventColor = 'blue';
-        }
-
-        return StringHelper.encodeHtml(task.name);
-    }
 };
 
 const timelineConfig = {
