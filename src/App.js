@@ -15,7 +15,7 @@ import {
 import { schedulerConfig } from './AppConfig';
 
 const App = () => {
-    return <BryntumSchedulerPro {...schedulerConfig} />;
+    return <BryntumSchedulerPro {...schedulerConfig} nonWorkingTimeFeature />;
 };
 
 export default App;
