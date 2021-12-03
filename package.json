@@ -18,9 +18,9 @@
     "node_modules/@bryntum/schedulerpro/fonts/*": "copy public/themes/fonts/"
   },
   "dependencies": {
-    "@bryntum/demo-resources": "1.0.1",
-    "@bryntum/schedulerpro": "4.3.1",
-    "@bryntum/schedulerpro-react": "4.3.1",
+    "@bryntum/demo-resources": "^1.0.1",
+    "@bryntum/schedulerpro": "4.3.3",
+    "@bryntum/schedulerpro-react": "4.3.3",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
     "react-scripts": "4.0.1",
