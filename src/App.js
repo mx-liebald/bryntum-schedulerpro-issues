@@ -17,6 +17,11 @@ import {
 } from '@bryntum/schedulerpro/schedulerpro.umd.js';
 import { schedulerConfig, } from './AppConfig';
 
+function useRerender() {
+    const [, u] = React.useReducer(x => !x, true);
+    return u;
+}
+
 const App = () => {
     const resources = React.useMemo(() => [{
         "id": 1,
@@ -26,20 +31,16 @@ const App = () => {
         "id": 2,
         "name": "Arnold"
     }], []);
-    const events = React.useMemo(() => [{
+    const [events, updateEvents] = React.useState(() => [{
         "id": 1,
         "name": "Ventilation",
         "startDate": "2020-12-01",
         "duration": 4,
-        "iconCls": "b-fa b-fa-fan"
+        "resourceId": 1
     }], []);
-    const [assignments, updateAssignments] = React.useState(() => [{
-        "id": 1,
-        "event": 1,
-        "resource": 2
-    }]);
+    const rerender = useRerender();
     const changeResource = (ev) => {
-        updateAssignments(asgs => [{ ...asgs[0], resource: asgs[0].resource === 1 ? 2 : 1 }]);
+        updateEvents(events => [{ ...events[0], resourceId: events[0].resourceId === 1 ? 2 : 1 }]);
         ev.preventDefault();
         ev.stopPropagation();
     }
@@ -57,15 +58,55 @@ const App = () => {
     }));
     React.useEffect(() => {
         projectModel.resourceStore.data = resources;
-        projectModel.eventStore.data = events;
+        rerender();
 
-    }, [events, projectModel.eventStore, projectModel.resourceStore, resources])
+    }, [projectModel.resourceStore, resources])
     React.useEffect(() => {
-        projectModel.assignmentStore.data = assignments;
-    }, [assignments, projectModel.assignmentStore]);
+        projectModel.eventStore.data = events;
+        rerender();
+
+    }, [events, projectModel.eventStore])
     return <div>
         <button type={'button'} onClick={changeResource}>Test</button>
-        <BryntumSchedulerPro {...schedulerConfig} project={projectModel} />;
+        <BryntumSchedulerPro {...schedulerConfig}
+            project={projectModel}
+            eventStyle="regular"
+            nonWorkingTimeFeature={{
+                highlightWeekends: true,
+            }}
+            headerMenuFeature={false} // disables menu together with sorting of resource columns
+            cellMenuFeature={false} // removes menu on resource column cells
+            dependencyEditFeature={false} // also removes circle shaped handles
+            dependenciesFeature={false}
+            columnPickerFeature={false}
+            eventMenuFeature={{
+                items: {
+                    deleteEvent: false,
+                    unassignEvent: false,
+                },
+            }}
+            sortFeature={false}
+            eventCopyPasteFeature={false}
+            eventDragCreateFeature={false}
+            scheduleTooltipFeature={false}
+            scheduleMenuFeature={{
+                items: {
+                    addEvent: false,
+                },
+            }}
+            cellEditFeature={false}
+            timeAxisHeaderMenuFeature={{
+                items: {
+                    zoomLevel: false,
+                    eventsFilter: false,
+                    dateRange: false,
+                },
+            }}
+            taskEditFeature={false}
+            headerZoomFeature={false}
+            eventEditFeature
+            createEventOnDblClick={false}
+            enableDeleteKey={false} />;
     </div>
 };
 
