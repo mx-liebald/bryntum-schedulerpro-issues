@@ -24,13 +24,8 @@ export const eventTemplate = (eventData) => {
     `;
 };
 
-function useRerender() {
-    const [, u] = React.useReducer(x => !x, true);
-    return u;
-}
-
 const App = () => {
-    const resources = React.useMemo(() => [{
+    const [resources, updateResources] = React.useState([{
         "id": 1,
         "name": "Angelo"
     },
@@ -44,46 +39,74 @@ const App = () => {
         "startDate": "2020-12-01",
         "duration": 1,
         "durationUnit": 'd',
-        "resourceId": 1
     }, ...range(2, 100).map(id => ({
         id,
         name: "Test" + id,
         "startDate": new Date(2020, 11, Math.floor(id / 4), (id % 4) * 6),
         "duration": 4,
         "durationUnit": 'h',
-        "resourceId": (id % 2) + 2,
     }))], []);
-    const rerender = useRerender();
+    const [assignments, updateAssignments] = React.useState(() => [{
+        id: 1,
+        eventId: 1,
+        resourceId: 1,
+    }, ...range(2, 100).map(id => ({
+        id,
+        eventId: id,
+        resourceId: (id % 2) + 2,
+    }))], [])
+
     const changeResource = (ev) => {
-        updateEvents(events => [{ ...events[0], resourceId: events[0].resourceId === 1 ? 2 : 1 }, ...events.slice(1)]);
+        updateAssignments(asgs => {
+            const changedAsg = { 
+                ...asgs[0], 
+                resourceId: asgs[0].resourceId === 1 ? 2 : 1,
+            };
+            const updated = [changedAsg, ...asgs.slice(1)];
+            return updated;
+        });
         ev.preventDefault();
         ev.stopPropagation();
     }
 
     const [projectModel] = React.useState(() => new ProjectModel({
         silenceInitialCommit: true,
+        assignmentStore: {
+            syncDataOnLoad: true,
+            autoCommit: true,
+        },
         eventStore: {
             syncDataOnLoad: true,
-            autoCommit: false,
         },
         resourceStore: {
             syncDataOnLoad: true,
         },
     }));
+    const updating = React.useRef(false);
     React.useEffect(() => {
-        projectModel.resourceStore.data = resources;
-        rerender();
-    }, [projectModel.resourceStore, rerender, resources])
-    React.useEffect(() => {
-        projectModel.eventStore.data = events.map(event => clone(event));
-        rerender();
-    }, [events, projectModel.eventStore, rerender])
+        if (updating.current) return;
+        const asgs = assignments;
+        const ress = resources;
+        const evts = events;
+        (async () => {
+            updating.current = true;
+            console.log('updating');
+            await projectModel.loadInlineData({
+                eventsData: evts,
+                resourcesData: ress,
+                assignmentsData: asgs.map(asg => clone(asg)),
+            });
+            console.log('finished updating');
+            updating.current = false;
+        })();
+    }, [assignments, events, projectModel, resources])
+
     const syncResources = () => {
-        projectModel.resourceStore.data = resources.map(resource => clone(resource));
-    }
+        updateResources(resources.map(resource => clone(resource)))
+    };
     const syncEvents = () => {
-        projectModel.eventStore.data = [...events];
-    }
+        updateEvents(events.map(event => clone(event)));
+    };
     return <div style={{ minHeight: '50vh' }}>
         <div style={{ display: 'flex', margin: '1rem' }}>
             <button type="button" onClick={changeResource}>Switch assignment of Ventilation</button>
