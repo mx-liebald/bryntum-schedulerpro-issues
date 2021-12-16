@@ -23,8 +23,13 @@ export const eventTemplate = (eventData) => {
     return `<div>${StringHelper.encodeHtml(eventData.eventRecord.data?.name)}</div>
     `;
 };
-
+export function useRerender() {
+    const [, u] = React.useReducer(x => !x, true);
+    return u;
+  }
+  
 const App = () => {
+    const rerender = useRerender();
     const [resources, updateResources] = React.useState([{
         "id": 1,
         "name": "Angelo"
@@ -61,6 +66,7 @@ const App = () => {
             const changedAsg = { 
                 ...asgs[0], 
                 resourceId: asgs[0].resourceId === 1 ? 2 : 1,
+                resource: asgs[0].resource === 1 ? 2 : 1,
             };
             const updated = [changedAsg, ...asgs.slice(1)];
             return updated;
@@ -82,6 +88,7 @@ const App = () => {
             syncDataOnLoad: true,
         },
     }));
+
     const updating = React.useRef(false);
     React.useEffect(() => {
         if (updating.current) return;
@@ -94,12 +101,13 @@ const App = () => {
             await projectModel.loadInlineData({
                 eventsData: evts,
                 resourcesData: ress,
-                assignmentsData: asgs.map(asg => clone(asg)),
+                assignmentsData: asgs,
             });
+            rerender();
             console.log('finished updating');
             updating.current = false;
         })();
-    }, [assignments, events, projectModel, resources])
+    }, [assignments, events, projectModel, rerender, resources])
 
     const syncResources = () => {
         updateResources(resources.map(resource => clone(resource)))
