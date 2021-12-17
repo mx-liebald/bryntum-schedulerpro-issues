@@ -65,7 +65,7 @@ const App = () => {
         updateAssignments(asgs => {
             const changedAsg = { 
                 ...asgs[0], 
-                resourceId: asgs[0].resourceId === 1 ? 2 : 1,
+                // resourceId: asgs[0].resourceId === 1 ? 2 : 1,
                 resource: asgs[0].resource === 1 ? 2 : 1,
             };
             const updated = [changedAsg, ...asgs.slice(1)];
@@ -78,20 +78,20 @@ const App = () => {
     const [projectModel] = React.useState(() => new ProjectModel({
         silenceInitialCommit: true,
         assignmentStore: {
-            syncDataOnLoad: true,
+            syncDataOnLoad: false,
             autoCommit: true,
         },
         eventStore: {
-            syncDataOnLoad: true,
+            syncDataOnLoad: false,
         },
         resourceStore: {
-            syncDataOnLoad: true,
+            syncDataOnLoad: false,
         },
     }));
 
     const updating = React.useRef(false);
     React.useEffect(() => {
-        if (updating.current) return;
+        // if (updating.current) return;
         const asgs = assignments;
         const ress = resources;
         const evts = events;
@@ -99,9 +99,11 @@ const App = () => {
             updating.current = true;
             console.log('updating');
             await projectModel.loadInlineData({
+                // assignmentsData: [clone(asgs[0]), ...asgs.slice(1)],
                 eventsData: evts,
                 resourcesData: ress,
                 assignmentsData: asgs,
+                //assignmentsData: asgs.map(asg => clone(asg)),
             });
             rerender();
             console.log('finished updating');
