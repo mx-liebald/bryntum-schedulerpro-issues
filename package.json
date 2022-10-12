@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@bryntum/demo-resources": "^1.0.1",
-    "@bryntum/schedulerpro": "4.3.3",
-    "@bryntum/schedulerpro-react": "4.3.3",
+    "@bryntum/schedulerpro": "5.0.7",
+    "@bryntum/schedulerpro-react": "5.0.7",
     "react": "~17.0.1",
     "react-dom": "~17.0.1",
     "react-scripts": "4.0.1",

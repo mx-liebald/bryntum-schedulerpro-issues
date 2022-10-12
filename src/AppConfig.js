@@ -4,7 +4,7 @@
 import {
     ProjectModel,
     StringHelper
-} from '@bryntum/schedulerpro/schedulerpro.umd';
+} from '@bryntum/schedulerpro';
 
 const project = new ProjectModel({
     autoLoad: true,

@@ -15,7 +15,7 @@ import {
 import {
     ProjectModel,
     StringHelper
-} from '@bryntum/schedulerpro/schedulerpro.umd.js';
+} from '@bryntum/schedulerpro';
 import { schedulerConfig, } from './AppConfig';
 import { clone, range } from 'lodash';
 
@@ -79,7 +79,7 @@ const App = () => {
         silenceInitialCommit: true,
         assignmentStore: {
             syncDataOnLoad: false,
-            autoCommit: true,
+            // autoCommit: true,
         },
         eventStore: {
             syncDataOnLoad: false,
@@ -117,6 +117,7 @@ const App = () => {
     const syncEvents = () => {
         updateEvents(events.map(event => clone(event)));
     };
+    const scrollable = React.useMemo(() => ({ onScroll: e => console.log(e)}), []);
     return <div style={{ minHeight: '50vh' }}>
         <div style={{ display: 'flex', margin: '1rem' }}>
             <button type="button" onClick={changeResource}>Switch assignment of Ventilation</button>
@@ -141,6 +142,7 @@ const App = () => {
                     unassignEvent: false,
                 },
             }}
+            scrollable={scrollable}
             sortFeature={false}
             eventCopyPasteFeature={false}
             eventDragCreateFeature={false}
