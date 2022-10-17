@@ -3,7 +3,7 @@
  */
 
 // React libraries
-import React from 'react';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 // Stylings
 import './App.scss';
@@ -24,13 +24,13 @@ export const eventTemplate = (eventData) => {
     `;
 };
 export function useRerender() {
-    const [, u] = React.useReducer(x => !x, true);
+    const [, u] = useReducer(x => !x, true);
     return u;
   }
   
 const App = () => {
     const rerender = useRerender();
-    const [resources, updateResources] = React.useState([{
+    const [resources, updateResources] = useState([{
         "id": 1,
         "name": "Angelo"
     },
@@ -38,7 +38,7 @@ const App = () => {
         "id": 2,
         "name": "Arnold"
     }, ...range(3, 150).map(id => ({ id, name: "Hello World" }))], []);
-    const [events, updateEvents] = React.useState(() => [{
+    const [events, updateEvents] = useState(() => [{
         "id": 1,
         "name": "Ventilation",
         "startDate": "2020-12-01",
@@ -51,7 +51,7 @@ const App = () => {
         "duration": 4,
         "durationUnit": 'h',
     }))], []);
-    const [assignments, updateAssignments] = React.useState(() => [{
+    const [assignments, updateAssignments] = useState(() => [{
         id: 1,
         eventId: 1,
         resourceId: 1,
@@ -75,22 +75,21 @@ const App = () => {
         ev.stopPropagation();
     }
 
-    const [projectModel] = React.useState(() => new ProjectModel({
+    const [projectModel] = useState(() => new ProjectModel({
         silenceInitialCommit: true,
         assignmentStore: {
-            syncDataOnLoad: false,
-            // autoCommit: true,
+            syncDataOnLoad: true,
         },
         eventStore: {
-            syncDataOnLoad: false,
+            syncDataOnLoad: true,
         },
         resourceStore: {
-            syncDataOnLoad: false,
+            syncDataOnLoad: true,
         },
     }));
 
-    const updating = React.useRef(false);
-    React.useEffect(() => {
+    const updating = useRef(false);
+    useEffect(() => {
         // if (updating.current) return;
         const asgs = assignments;
         const ress = resources;
@@ -105,9 +104,9 @@ const App = () => {
                 assignmentsData: asgs,
                 //assignmentsData: asgs.map(asg => clone(asg)),
             });
-            rerender();
             console.log('finished updating');
             updating.current = false;
+            rerender();
         })();
     }, [assignments, events, projectModel, rerender, resources])
 
@@ -117,7 +116,7 @@ const App = () => {
     const syncEvents = () => {
         updateEvents(events.map(event => clone(event)));
     };
-    const scrollable = React.useMemo(() => ({ onScroll: e => console.log(e)}), []);
+    const scrollable = useMemo(() => ({ onScroll: e => console.log(e)}), []);
     return <div style={{ minHeight: '50vh' }}>
         <div style={{ display: 'flex', margin: '1rem' }}>
             <button type="button" onClick={changeResource}>Switch assignment of Ventilation</button>
