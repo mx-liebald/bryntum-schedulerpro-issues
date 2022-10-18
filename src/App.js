@@ -3,7 +3,7 @@
  */
 
 // React libraries
-import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
 // Stylings
 import './App.scss';
@@ -16,8 +16,7 @@ import {
     ProjectModel,
     StringHelper
 } from '@bryntum/schedulerpro';
-import { schedulerConfig, } from './AppConfig';
-import { clone, range } from 'lodash';
+import { projectModel, schedulerConfig, } from './AppConfig';
 
 export const eventTemplate = (eventData) => {
     return `<div>${StringHelper.encodeHtml(eventData.eventRecord.data?.name)}</div>
@@ -29,110 +28,112 @@ export function useRerender() {
   }
   
 const App = () => {
+    const [grouped, updateGrouped] = useState(null);
     const rerender = useRerender();
-    const [resources, updateResources] = useState([{
-        "id": 1,
-        "name": "Angelo"
+    const resources = useMemo(() => [{
+        id: '1',
+        name: "Angelo",
+        groups: ['group-a-1', 'group-a-2', 'group-b-1'],
     },
     {
-        "id": 2,
-        "name": "Arnold"
-    }, ...range(3, 150).map(id => ({ id, name: "Hello World" }))], []);
+        id: '2',
+        name: "Arnold",
+        groups: ['group-b-2'],
+    }], []);
+    const [assignments, updateAssignments] = useState(() => [{ eventId: '1', resourceId: '1' }]);
+
+    const maybeGroupedResources = useMemo(() => {
+        if (grouped == null) {
+            return resources;
+        } else {
+            const namedGroups = resources.flatMap(r => r.groups).filter(g => g.startsWith(grouped));            
+            return namedGroups.map(namedGroup => 
+                ({ 
+                    id: namedGroup,
+                    name: namedGroup,
+                    expanded: true,
+                    children: resources.filter(r => r.groups.some(g => g === namedGroup)).map(r => ({ ...r, id: namedGroup + '/' + r.id }))
+                })
+            );
+        }
+    }, [grouped, resources]);
     const [events, updateEvents] = useState(() => [{
-        "id": 1,
-        "name": "Ventilation",
-        "startDate": "2020-12-01",
-        "duration": 1,
-        "durationUnit": 'd',
-    }, ...range(2, 100).map(id => ({
-        id,
-        name: "Test" + id,
-        "startDate": new Date(2020, 11, Math.floor(id / 4), (id % 4) * 6),
-        "duration": 4,
-        "durationUnit": 'h',
-    }))], []);
-    const [assignments, updateAssignments] = useState(() => [{
         id: 1,
-        eventId: 1,
-        resourceId: 1,
-    }, ...range(2, 100).map(id => ({
-        id,
-        eventId: id,
-        resourceId: (id % 2) + 2,
-    }))], [])
+        name: "appointment",
+        startDate: "2020-12-01",
+        duration: 1,
+        durationUnit: 'd',
+    }], []);
+    const maybeGroupedAssignments = useMemo(() => {
+        if (grouped != null) {
+            return resources[0].groups.filter(g => g.startsWith(grouped)).flatMap(g => {
+                return assignments.map(a => ({
+                    id: g + '/' + a.resourceId,
+                    eventId: a.eventId,
+                    resourceId: g + '/' + a.resourceId,
+                }));
+            })
+        }
+        return assignments.map(a => ({
+            id: a.resourceId + a.eventId,
+            eventId: a.eventId,
+            resourceId: a.resourceId,
+        }));
+    }, [assignments, grouped, resources])
 
-    const changeResource = (ev) => {
-        updateAssignments(asgs => {
-            const changedAsg = { 
-                ...asgs[0], 
-                // resourceId: asgs[0].resourceId === 1 ? 2 : 1,
-                resource: asgs[0].resource === 1 ? 2 : 1,
-            };
-            const updated = [changedAsg, ...asgs.slice(1)];
-            return updated;
+    const toggleGroupMode = useCallback(() => {
+        updateGrouped(old => {
+            const groupModes = [null, 'group-a', 'group-b'];
+            return groupModes[(groupModes.indexOf(old) + 1) % 3];
         });
-        ev.preventDefault();
-        ev.stopPropagation();
-    }
+    }, []);
 
-    const [projectModel] = useState(() => new ProjectModel({
-        silenceInitialCommit: true,
-        assignmentStore: {
-            syncDataOnLoad: true,
-        },
-        eventStore: {
-            syncDataOnLoad: true,
-        },
-        resourceStore: {
-            syncDataOnLoad: true,
-        },
-    }));
-
-    const updating = useRef(false);
     useEffect(() => {
-        // if (updating.current) return;
-        const asgs = assignments;
-        const ress = resources;
-        const evts = events;
         (async () => {
-            updating.current = true;
             console.log('updating');
             await projectModel.loadInlineData({
-                // assignmentsData: [clone(asgs[0]), ...asgs.slice(1)],
-                eventsData: evts,
-                resourcesData: ress,
-                assignmentsData: asgs,
-                //assignmentsData: asgs.map(asg => clone(asg)),
+                eventsData: events,
+                resourcesData: maybeGroupedResources,
+                assignmentsData: maybeGroupedAssignments,
             });
-            console.log('finished updating');
-            updating.current = false;
-            rerender();
+            console.log('finished updating');            
         })();
-    }, [assignments, events, projectModel, rerender, resources])
-
-    const syncResources = () => {
-        updateResources(resources.map(resource => clone(resource)))
-    };
-    const syncEvents = () => {
-        updateEvents(events.map(event => clone(event)));
-    };
+    }, [assignments, events, maybeGroupedAssignments, maybeGroupedResources, rerender, resources])
+    
+    useEffect(() => {
+        const asgChangeListener = (evt) => {
+            if (evt.changes?.resourceId != null) {
+                updateAssignments(oldAssignments => [{ ...oldAssignments[0], resourceId: evt.changes.resourceId.value }])
+            }
+        };
+        const eventChangeListener = (evt) => {
+            console.log('test');
+            if (evt.changes?.duration != null) {
+                updateEvents(oldEvents => [{ ...oldEvents[0], duration: evt.changes.duration.value }]);
+            }
+        }
+        projectModel.assignmentStore.addListener('change', asgChangeListener);
+        projectModel.eventStore.addListener('change', eventChangeListener);
+        return () => {
+            projectModel.eventStore.removeListener('change', eventChangeListener);
+            projectModel.assignmentStore.removeListener('change', asgChangeListener);            
+        };
+    }, [])
+    
     const scrollable = useMemo(() => ({ onScroll: e => console.log(e)}), []);
+    
     return <div style={{ minHeight: '50vh' }}>
         <div style={{ display: 'flex', margin: '1rem' }}>
-            <button type="button" onClick={changeResource}>Switch assignment of Ventilation</button>
-            <button type="button" onClick={syncResources}>Sync resources</button>
-            <button type="button" onClick={syncEvents}>Sync events</button>
+            <button type="button" onClick={toggleGroupMode}>Toggle grouping mode</button>
+            <div style={{ margin: '1rem'}}>Group: {grouped != null ? grouped : 'without groups'}</div>
         </div>
         <BryntumSchedulerPro {...schedulerConfig}
             project={projectModel}
             eventStyle="regular"
-            nonWorkingTimeFeature={{
-                highlightWeekends: true,
-            }}
             eventRenderer={eventTemplate}
-            headerMenuFeature={false} // disables menu together with sorting of resource columns
-            cellMenuFeature={false} // removes menu on resource column cells
-            dependencyEditFeature={false} // also removes circle shaped handles
+            headerMenuFeature={false} 
+            cellMenuFeature={false}
+            dependencyEditFeature={false}
             dependenciesFeature={false}
             columnPickerFeature={false}
             eventMenuFeature={{
@@ -159,6 +160,7 @@ const App = () => {
                     dateRange: false,
                 },
             }}
+            // treeFeature
             taskEditFeature={false}
             headerZoomFeature={false}
             eventEditFeature

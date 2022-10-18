@@ -6,34 +6,39 @@ import {
     StringHelper
 } from '@bryntum/schedulerpro';
 
-const project = new ProjectModel({
-    autoLoad: true,
+export const projectModel = new ProjectModel({
+    // autoLoad: true,
+    // silenceInitialCommit: true,
+    assignmentStore: {
+        syncDataOnLoad: true,
+    },
+    eventStore: {
+        syncDataOnLoad: true,
+    },
+    resourceStore: {
+        syncDataOnLoad: true,
+        tree: true,
+    },
+
 });
 
 const schedulerConfig = {
-    project,
+    project: projectModel,
     startDate: new Date(2020, 10, 29),
     endDate: new Date(2021, 0, 10),
     rowHeight: 50,
     barMargin: 2,
-
-    viewPreset: 'weekAndDay',
+    // forceFit   : true,
+    // viewPreset: 'weekAndDay',
     resourceImagePath: 'users/',
 
     columns: [
         {
             text: 'Resource',
             field: 'name',
-            width: 120,
-            type: 'resourceInfo'
+            width: 240,
+            type: 'tree',
         },
-        {
-            text: 'Tasks',
-            field: 'events.length',
-            width: 70,
-            align: 'right',
-            editor: false
-        }
     ],
 
     eventRenderer({ eventRecord: task, renderData }) {
@@ -47,8 +52,4 @@ const schedulerConfig = {
     }
 };
 
-const timelineConfig = {
-    project
-};
-
-export { schedulerConfig, timelineConfig };
+export { schedulerConfig };
