@@ -1,11 +1,15 @@
 @import '~@bryntum/demo-resources/scss/example.scss';
 
-#content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+.container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    margin: 1rem;
+    grid-row-gap: 1rem;
+    border: 1px solid #ececec;
 }
 
-.b-theme-stockholm .demo-toolbar label {
-    text-transform: uppercase;
+.header {
+    display: flex;
 }

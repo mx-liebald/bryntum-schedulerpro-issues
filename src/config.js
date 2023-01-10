@@ -1,10 +1,8 @@
 /**
  * Application configuration
  */
-import {
-    ProjectModel,
-    StringHelper
-} from '@bryntum/schedulerpro';
+
+import { ProjectModel, StringHelper } from '@bryntum/schedulerpro';
 
 export const projectModel = new ProjectModel({
     // autoLoad: true,
@@ -19,17 +17,15 @@ export const projectModel = new ProjectModel({
         syncDataOnLoad: true,
         tree: true,
     },
-
 });
 
-const schedulerConfig = {
+export const schedulerConfig = {
     project: projectModel,
-    startDate: new Date(2020, 10, 29),
-    endDate: new Date(2021, 0, 10),
+    startDate: new Date(2022, 10, 10),
+    endDate: new Date(2022, 12, 31),
     rowHeight: 50,
-    barMargin: 2,
+    barMargin: 4,
     // forceFit   : true,
-    // viewPreset: 'weekAndDay',
     resourceImagePath: 'users/',
 
     columns: [
@@ -51,5 +47,3 @@ const schedulerConfig = {
         return StringHelper.encodeHtml(task.name);
     }
 };
-
-export { schedulerConfig };

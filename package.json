@@ -18,18 +18,19 @@
     "node_modules/@bryntum/schedulerpro/fonts/*": "copy public/themes/fonts/"
   },
   "dependencies": {
-    "@bryntum/demo-resources": "^1.0.1",
-    "@bryntum/schedulerpro": "5.0.7",
-    "@bryntum/schedulerpro-react": "5.0.7",
-    "react": "~17.0.1",
-    "react-dom": "~17.0.1",
-    "react-scripts": "4.0.1",
+    "@bryntum/demo-resources": "^1.1.0",
+    "@bryntum/schedulerpro": "5.2.5",
+    "@bryntum/schedulerpro-react": "5.2.5",
+    "@faker-js/faker": "^7.6.0",
+    "react": "~18.1.0",
+    "react-dom": "~18.1.0",
+    "react-scripts": "3.4.4",
     "web-vitals": "~0.2.4"
   },
   "devDependencies": {
     "cross-env": "~7.0.3",
     "postinstall": "~0.7.0",
-    "sass": "~1.32.5"
+    "sass": "^1.57.1"
   },
   "browserslist": {
     "production": [
