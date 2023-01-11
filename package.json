@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@bryntum/demo-resources": "^1.1.0",
-    "@bryntum/schedulerpro": "5.2.5",
-    "@bryntum/schedulerpro-react": "5.2.5",
+    "@bryntum/schedulerpro": "5.2.6",
+    "@bryntum/schedulerpro-react": "5.2.6",
     "@faker-js/faker": "^7.6.0",
     "react": "~18.1.0",
     "react-dom": "~18.1.0",

@@ -1213,15 +1213,15 @@
   resolved "https://packages.mobilexag.de/repository/npm-public/@bryntum/schedulerpro-lib/-/schedulerpro-lib-1.0.0.tgz#52aa7cdaa1b36b61645d7872a60f2191a4d80c98"
   integrity sha512-dah7bXYlDjhhUmWAdimOgSIfcPl10KKmH5Q9eeeWyaGraHxfgp+67I8roI/ZeYqLWHywQowPY/KQ2dm0SOmFww==
 
-"@bryntum/schedulerpro-react@5.2.5":
-  version "5.2.5"
-  resolved "https://packages.mobilexag.de/repository/npm-public/@bryntum/schedulerpro-react/-/schedulerpro-react-5.2.5.tgz#e83b981f4f1b568728a47170a0763e6b2c71bbd7"
-  integrity sha512-8TKMQ22k1/ivaLPHyw2wisZpnuQlaql5X+n9dBR8YrhHW6NJc6HVKt4PeWebRlivjQ/BYGv8TmQ41DhwVsHI2g==
+"@bryntum/schedulerpro-react@5.2.6":
+  version "5.2.6"
+  resolved "https://packages.mobilexag.de/repository/npm-public/@bryntum/schedulerpro-react/-/schedulerpro-react-5.2.6.tgz#d3893f7b106e74ce43a60f02f699018919d34442"
+  integrity sha512-Q9ESjUPcaDRZekdV75bzLFvSNmvIy2jIYBxkhOzQP9tVWIntULql8mRm0Yn8BU38JOY/KZWWQ9i/CuIDQ4q2Qw==
 
-"@bryntum/schedulerpro@5.2.5":
-  version "5.2.5"
-  resolved "https://packages.mobilexag.de/repository/npm-public/@bryntum/schedulerpro/-/schedulerpro-5.2.5.tgz#43460d6597dea5a5dcfc9f5a41e3d3884358dee9"
-  integrity sha512-BWe7mYIloxc147Etzm/jtvJ6NbS6EzPKYYeJI13mAOv2ED5pFvqV6F5/UGb1yPJeMzo8NBAYrsw2p0qVv2aFeg==
+"@bryntum/schedulerpro@5.2.6":
+  version "5.2.6"
+  resolved "https://packages.mobilexag.de/repository/npm-public/@bryntum/schedulerpro/-/schedulerpro-5.2.6.tgz#bebea3643cc716f7e93dc8eca2d7c0d20ac055ea"
+  integrity sha512-A6mEZut2TmtsDjxWFEsICIhNGaVdI1F0h5Ca4IfzLOxWFDCf2ez2aWIrCS2QUWCG6x1mjsOee1cYkdG92Z6REw==
   dependencies:
     "@bryntum/schedulerpro-lib" "1.0.0"
 
