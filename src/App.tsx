@@ -43,6 +43,7 @@ export default function App(): JSX.Element {
       "%cCalling loadInlineData, create new event now!",
       "background: yellow; color: black; font-size: 16px;"
     );
+    console.time("loadInlineData runtime");
 
     schedulerInstance.suspendEvents(true);
     schedulerInstance.suspendRefresh();
@@ -61,6 +62,7 @@ export default function App(): JSX.Element {
       "%cloadInlineData finished.",
       "background: red; color: white; font-size: 16px;"
     );
+    console.timeEnd("loadInlineData runtime");
   }, []);
 
   useEffect(() => {
