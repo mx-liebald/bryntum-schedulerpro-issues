@@ -1,7 +1,7 @@
 {
-  "name": "timeline",
-  "description": "React Pro Timeline demo",
-  "version": "4.3.0",
+  "name": "taskeditor",
+  "description": "Pro TaskEditor demo",
+  "version": "5.6.5",
   "author": {
     "name": "Bryntum",
     "url": "https://bryntum.com",
@@ -10,27 +10,37 @@
   "license": "commercial",
   "homepage": "./",
   "scripts": {
-    "start": "cross-env NODE_OPTIONS='--max-old-space-size=8192' react-scripts start",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "start": "vite",
     "postinstall": "postinstall"
   },
   "postinstall": {
-    "node_modules/@bryntum/schedulerpro/*.css": "copy public/themes/",
+    "node_modules/@bryntum/demo-resources/images/favicon.png": "copy public/favicon.png",
+    "node_modules/@bryntum/schedulerpro/*.css*": "copy public/themes/",
     "node_modules/@bryntum/schedulerpro/fonts/*": "copy public/themes/fonts/"
   },
   "dependencies": {
-    "@bryntum/demo-resources": "^1.1.0",
-    "@bryntum/schedulerpro": "5.3.7",
-    "@bryntum/schedulerpro-react": "5.3.7",
-    "@faker-js/faker": "^7.6.0",
-    "react": "~18.1.0",
-    "react-dom": "~18.1.0",
-    "react-scripts": "3.4.4",
-    "web-vitals": "~0.2.4"
+    "@bryntum/demo-resources": "1.3.0",
+    "@bryntum/schedulerpro": "5.6.5",
+    "@bryntum/schedulerpro-react": "5.6.5",
+    "lodash": "^4.17.21",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0"
   },
   "devDependencies": {
-    "cross-env": "~7.0.3",
-    "postinstall": "~0.7.0",
-    "sass": "^1.57.1"
+    "@types/lodash": "^4.14.202",
+    "@types/react": "~18.0.28",
+    "@types/react-dom": "~18.0.11",
+    "@vitejs/plugin-react": "~3.1.0",
+    "postinstall": "~0.7.4",
+    "sass": "~1.42.0",
+    "typescript": "~4.9.3",
+    "vite": "~4.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   },
   "browserslist": {
     "production": [
