@@ -1,6 +1,6 @@
 # Example to reproduce Bryntum issue
 
-Issue: TODO
+[Forum post](https://forum.bryntum.com/viewtopic.php?t=31863)
 
 ## Setup
 
