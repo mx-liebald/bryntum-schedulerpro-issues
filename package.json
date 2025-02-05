@@ -13,31 +13,23 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start": "vite",
-    "postinstall": "postinstall"
-  },
-  "postinstall": {
-    "node_modules/@bryntum/demo-resources/images/favicon.png": "copy public/favicon.png",
-    "node_modules/@bryntum/schedulerpro/*.css*": "copy public/themes/",
-    "node_modules/@bryntum/schedulerpro/fonts/*": "copy public/themes/fonts/"
+    "start": "vite"
   },
   "dependencies": {
-    "@bryntum/demo-resources": "1.3.0",
-    "@bryntum/schedulerpro": "5.6.5",
-    "@bryntum/schedulerpro-react": "5.6.5",
+    "@bryntum/schedulerpro": "6.1.6",
+    "@bryntum/schedulerpro-react": "6.1.6",
     "lodash": "^4.17.21",
-    "react": "~18.2.0",
-    "react-dom": "~18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
-    "@types/react": "~18.0.28",
-    "@types/react-dom": "~18.0.11",
-    "@vitejs/plugin-react": "~3.1.0",
-    "postinstall": "~0.7.4",
-    "sass": "~1.42.0",
-    "typescript": "~4.9.3",
-    "vite": "~4.2.0"
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "sass": "1.83.4",
+    "typescript": "5.7.3",
+    "vite": "6.0.11"
   },
   "engines": {
     "node": ">=14.0.0"

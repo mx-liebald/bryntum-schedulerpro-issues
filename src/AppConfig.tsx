@@ -1,42 +1,50 @@
-import { EventModel, ResourceModel } from "@bryntum/schedulerpro";
-import { BryntumSchedulerProProps } from "@bryntum/schedulerpro-react";
+import { BryntumSchedulerProProps } from '@bryntum/schedulerpro-react';
 
 /**
  * Application configuration
  */
 
 export const schedulerConfig: Partial<BryntumSchedulerProProps> = {
-  project: {
-    // autoLoad: true,
-    // loadUrl: "./data/data.json",
-  },
+  // project: {
+  // autoLoad: true,
+  // loadUrl: "./data/data.json",
+  // },
 
-  startDate: new Date(2020, 1, 1),
-  endDate: new Date(2020, 1, 6),
+  // startDate: new Date(2025, 2, 4),
+  // endDate: new Date(2025, 2, 11),
   rowHeight: 50,
-  barMargin: 0,
-  eventStyle: undefined,
+  barMargin: 5,
+  // eventStyle: 'border',
+  // eventColor: 'indigo',
 
   viewPreset: {
-    base: "hourAndDay",
-    tickWidth: 25,
+    base: 'hourAndDay',
+    tickWidth: 30,
     headers: [
       {
-        unit: "day",
-        dateFormat: "dddd", // Monday
+        unit: 'year',
+        dateFormat: 'YYYY',
       },
       {
-        unit: "hour",
-        dateFormat: "HH", // 00-23
+        unit: 'day',
+        dateFormat: 'ddd DD/MM',
+      },
+      {
+        unit: 'hour',
+        increment: 4,
+        dateFormat: 'HH',
       },
     ],
   },
 
   columns: [
     {
-      text: "Resource",
-      field: "name",
+      text: 'Resource',
+      field: 'name',
       width: 200,
     },
   ],
+  resourceTimeRangesFeature: {
+    enableMouseEvents: true,
+  },
 };

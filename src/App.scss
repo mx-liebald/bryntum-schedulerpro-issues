@@ -1,31 +1,31 @@
-.b-sch-event-wrap .b-sch-event {
-    opacity       : .7;
-    border-radius : 2px;
-
-    .b-sch-event-content {
-        display     : flex;
-        flex        : 1;
-        align-items : center;
-        color       : #444;
-        padding     : 0 .3em;
-
-        .desc {
-            flex          : 1;
-            text-align    : center;
-            text-overflow : ellipsis;
-            overflow      : hidden;
-        }
-    }
+body {
+  margin: 0;
 }
 
-.order {
-    font-size     : .8em;
-    color         : #555;
-    text-overflow : ellipsis;
-    overflow      : hidden;
+html,
+body,
+#root,
+.container {
+  height: 100%;
 }
 
-.b-task-percent-bar {
-    background-color : currentColor;
-    mix-blend-mode   : multiply;
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  padding: 0.75rem 1rem;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vertical-separator {
+  width: 1px;
+  background-color: lightgray;
+  margin: 0 1rem;
 }

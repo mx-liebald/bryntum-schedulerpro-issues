@@ -1,79 +1,52 @@
-import { useRef, useEffect, useCallback } from "react";
+import '@bryntum/schedulerpro/schedulerpro.material.css';
+import './App.scss';
 
-import { BryntumSchedulerPro } from "@bryntum/schedulerpro-react";
-import { SchedulerPro } from "@bryntum/schedulerpro";
-import { schedulerConfig } from "./AppConfig";
-import { range } from "lodash";
-
-import "@bryntum/demo-resources/scss/example-vite.scss";
-import "./App.scss";
-
-// Mock data
-const resources = range(15).map((i) => ({
-  id: i,
-  name: `Resource ${i}`,
-}));
-
-const events = range(10_000).map((i) => ({
-  id: i,
-  name: `Event ${i}`,
-  startDate: "2020-01-01",
-  duration: 2,
-}));
-
-const assignments = events.map((event, i) => ({
-  id: i,
-  event: event.id,
-  resources: resources[i % resources.length],
-}));
+import { useRef, useEffect, useCallback, useState } from 'react';
+import { BryntumSchedulerPro } from '@bryntum/schedulerpro-react';
+import { SchedulerPro } from '@bryntum/schedulerpro';
+import { schedulerConfig } from './AppConfig';
+import { generateTestData } from './testData';
+import { Toolbar } from './Toolbar';
 
 export default function App(): JSX.Element {
   const schedulerRef = useRef<BryntumSchedulerPro>(null);
+  const [includeEventsInNextData, setIncludeEventsInNextData] = useState(true);
 
-  const simulateDataRequest = useCallback(async () => {
-    const schedulerInstance = schedulerRef.current!.instance as SchedulerPro;
-    const { project } = schedulerInstance;
+  const loadData = useCallback(async () => {
+    const scheduler: SchedulerPro = schedulerRef.current!.instance;
+    const { project } = scheduler;
 
-    // Simulate long request to backend
-    console.log("Requesting event data...");
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log("Received event data, loadInlineData...");
+    const data = generateTestData(includeEventsInNextData);
 
-    console.log(
-      "%cCalling loadInlineData, create new event now!",
-      "background: yellow; color: black; font-size: 16px;"
-    );
-    console.time("loadInlineData runtime");
+    console.log('Loading inline data:', data);
+    console.time('loadInlineData runtime');
 
-    schedulerInstance.suspendEvents(true);
-    schedulerInstance.suspendRefresh();
+    scheduler.suspendEvents(true);
+    scheduler.suspendRefresh();
     try {
-      await project.loadInlineData({
-        eventsData: events,
-        resourcesData: resources,
-        assignmentsData: assignments,
-      });
+      await project.loadInlineData(data);
+    } catch (error) {
+      console.error(error);
     } finally {
-      schedulerInstance.resumeEvents();
-      await schedulerInstance.resumeRefresh(true);
+      scheduler.resumeEvents();
+      await scheduler.resumeRefresh(true);
     }
-
-    console.log(
-      "%cloadInlineData finished.",
-      "background: red; color: white; font-size: 16px;"
-    );
-    console.timeEnd("loadInlineData runtime");
-  }, []);
+    console.timeEnd('loadInlineData runtime');
+  }, [includeEventsInNextData]);
 
   useEffect(() => {
-    simulateDataRequest();
+    setTimeout(loadData, 500);
   }, []);
 
   return (
-    <BryntumSchedulerPro
-      resources={resources}
-      ref={schedulerRef}
-      {...schedulerConfig}
-    />
+    <div className='container'>
+      <Toolbar
+        schedulerRef={schedulerRef}
+        refetchData={loadData}
+        includeEventsInNextData={includeEventsInNextData}
+        setIncludeEventsInNextData={setIncludeEventsInNextData}
+      />
+      <BryntumSchedulerPro ref={schedulerRef} {...schedulerConfig} />
+    </div>
   );
 }
