@@ -20,9 +20,9 @@ export function generateTestData(includeEvents: boolean) {
     startDate: new Date(
       todayInMs +
         Math.floor(i / resourcesData.length) * oneDayInMs +
-        8 * oneHourInMs
+        6 * oneHourInMs
     ),
-    duration: 8,
+    duration: 12,
     durationUnit: 'hour',
   }));
 

@@ -10,7 +10,7 @@ import { Toolbar } from './Toolbar';
 
 export default function App(): JSX.Element {
   const schedulerRef = useRef<BryntumSchedulerPro>(null);
-  const [includeEventsInNextData, setIncludeEventsInNextData] = useState(true);
+  const [includeEventsInNextData, setIncludeEventsInNextData] = useState(false);
 
   const loadData = useCallback(async () => {
     const scheduler: SchedulerPro = schedulerRef.current!.instance;

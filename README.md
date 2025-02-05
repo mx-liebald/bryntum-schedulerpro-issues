@@ -1,28 +1,34 @@
 # Example to reproduce Bryntum issue
 
-Issue: https://forum.bryntum.com/viewtopic.php?t=27517
+Issue: TODO
 
-The code on this branch is based on the [TaskEditor demo](https://bryntum.com/products/schedulerpro/examples/frameworks/react-vite/taskeditor/dist/).
-
-## Steps to reproduce:
+## Setup
 
 Setup:
 
-1. Setup and start as described bellow (TLDR: `yarn install` + `yarn run start`)
-2. Navigate to `http://localhost:5173/` or `http://127.0.0.1:5173/` in your browser
-3. Open your browsers console
+1. Install the dependencies: `yarn install`
+2. Start the dev server: `yarn run start`
+3. Navigate to `http://localhost:5173/` or `http://127.0.0.1:5173/` in your browser
 
-Issue
+## Steps to reproduce issue
 
-1. Reload the page
-2. When the message "Calling loadInlineData, create new event now!" appears in the log, create a new event using the mouse drag gesture ![Message: Calling loadInlineData, create new event now!](./readme-images/readme-img-msg-1.png)
+1. Open the page, reload if the page was already opened
+   - Initially, you should see a resource time range for each resource on each day
+2. Click "Refetch Data"
 
-3) If the message "loadInlineData finished." appears and no error was logged, restart with step 1. ![Message: loadInlineData finished](./readme-images/readme-img-msg-2.png)
+**Expected Behavior:** nothing changes, the resource time ranges stay visible.
+
+**Actual behavior:** resource time ranges are hidden until you scroll sideways, which immediately renders all of them.
 
 ### Notes
 
-- The timeframe in which the issue occurs can be modified by changing the size of the data passed to `loadInlineData`. See _App.tsx_ -> `events`.
-- It seems like the issue does not occur, if there is no delay before `loadInlineData`.
+- If you enable "_Include events in next data request_", the next time data is loaded will include events. This also seems to avoid the above bug.
+
+### Recording
+
+<video  controls>
+  <source src="readme-resources/BryntumResourceTimeRangeBug.mp4" type="video/mp4">
+</video>
 
 <br/>
 <br/>
