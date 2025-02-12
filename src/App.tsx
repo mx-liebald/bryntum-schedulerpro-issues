@@ -1,7 +1,7 @@
 import '@bryntum/schedulerpro/schedulerpro.material.css';
 import './App.scss';
 
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { BryntumSchedulerPro } from '@bryntum/schedulerpro-react';
 import { SchedulerPro } from '@bryntum/schedulerpro';
 import { schedulerConfig } from './AppConfig';
@@ -10,13 +10,14 @@ import { Toolbar } from './Toolbar';
 
 export default function App(): JSX.Element {
   const schedulerRef = useRef<BryntumSchedulerPro>(null);
-  const [includeEventsInNextData, setIncludeEventsInNextData] = useState(false);
 
   const loadData = useCallback(async () => {
     const scheduler: SchedulerPro = schedulerRef.current!.instance;
     const { project } = scheduler;
 
-    const data = generateTestData(includeEventsInNextData);
+    const data = generateTestData();
+
+    await new Promise((r) => setTimeout(r, 500));
 
     console.log('Loading inline data:', data);
     console.time('loadInlineData runtime');
@@ -32,7 +33,7 @@ export default function App(): JSX.Element {
       await scheduler.resumeRefresh(true);
     }
     console.timeEnd('loadInlineData runtime');
-  }, [includeEventsInNextData]);
+  }, []);
 
   useEffect(() => {
     setTimeout(loadData, 500);
@@ -40,12 +41,7 @@ export default function App(): JSX.Element {
 
   return (
     <div className='container'>
-      <Toolbar
-        schedulerRef={schedulerRef}
-        refetchData={loadData}
-        includeEventsInNextData={includeEventsInNextData}
-        setIncludeEventsInNextData={setIncludeEventsInNextData}
-      />
+      <Toolbar schedulerRef={schedulerRef} refetchData={loadData} />
       <BryntumSchedulerPro ref={schedulerRef} {...schedulerConfig} />
     </div>
   );

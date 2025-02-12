@@ -17,15 +17,3 @@ body,
 button {
   padding: 0.75rem 1rem;
 }
-
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.vertical-separator {
-  width: 1px;
-  background-color: lightgray;
-  margin: 0 1rem;
-}
