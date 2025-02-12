@@ -1,6 +1,6 @@
 # Example to reproduce Bryntum issue
 
-<!-- [Forum post](https://forum.bryntum.com/TODO) -->
+[Forum post](https://forum.bryntum.com/viewtopic.php?t=31928)
 
 ## Setup
 
@@ -12,7 +12,7 @@ Setup:
 
 ## Issue
 
-When drag creating an event and, during the interaction, `loadInlineData` is called, the scheduler breaks and logs errors. This can be reproduced as follows:
+When drag creating an event and, during the interaction, `loadInlineData` is called (e.g. because of polling), the scheduler breaks and logs errors. This can be reproduced as follows:
 
 1. Open the page, reload if the page was already opened
 2. Click "Refetch Data". This waits 500ms (to give you time for step 3) and then calls `loadInlineData`
@@ -225,7 +225,7 @@ Uncaught (in promise) TypeError: Cannot read properties of null (reading 'active
 
 ## Notes
 
-- A similar issue was observed with non-react Bryntum Scheduler Pro: [forum post](https://forum.bryntum.com/viewtopic.php?t=31925) / [GitHub issue](https://github.com/bryntum/support/issues/10781)
+- A similar issue, but with different error messages, was observed with non-react Bryntum Scheduler Pro: [forum post](https://forum.bryntum.com/viewtopic.php?t=31925) / [GitHub issue](https://github.com/bryntum/support/issues/10781)
 - The error message sounds related to [this forum post](https://forum.bryntum.com/viewtopic.php?t=31863) / [GitHub issue](https://github.com/bryntum/support/issues/10748). But this is merely a vague suspicion
 
 <br/>
